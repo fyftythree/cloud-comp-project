@@ -21,7 +21,7 @@ def get_chord():
 
     return jsonify({"notes": notes})
 
-@app.route("/create_account", methods=["POST"])
+@app.route("/api/create_account", methods=["POST"])
 def create_account():
     username = request.form["username"]
     password = request.form["password"]
