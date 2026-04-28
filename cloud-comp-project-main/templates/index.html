@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chordloid</title>
+</head>
+<body>
+
+<h1>Chordloid</h1>
+
+<label>Chord Name:</label>
+<input id="name" type="text" placeholder="C">
+
+<label>Chord Type:</label>
+<input id="type" type="text" placeholder="major">
+
+<button onclick="getChord()">Get Notes</button>
+
+<h2 id="result"></h2>
+
+<script>
+    function getChord(){
+
+        console.log("Button clicked");
+        let name = document.getElementById("name").value;
+        let type = document.getElementById("type").value;
+
+        fetch(`http://127.0.0.1:5000/chord?name=${name}&type=${type}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText =
+                    "Notes: " + data.notes.join(", ");
+            });
+    }
+</script>
+
+</body>
+</html>
