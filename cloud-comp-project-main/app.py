@@ -8,9 +8,18 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = "dev-secret-key"
 
-@app.route('/chord')
+@app.route('/chord_page')
 def chord():
     return render_template("index.html")
+
+@app.route('/api/chord')
+def get_chord():
+    name = request.args.get("name")
+    chord_type = request.args.get("type")
+
+    notes = get_chord_note(name, chord_type)
+
+    return jsonify({"notes": notes})
 
 @app.route("/create_account", methods=["POST"])
 def create_account():
@@ -41,7 +50,7 @@ def login():
             session["user_id"] = user_id
             session["username"] = username
 
-            return redirect("/chord")
+            return redirect("/chord_page")
 
         return render_template("login.html", error="Invalid credentials")
 

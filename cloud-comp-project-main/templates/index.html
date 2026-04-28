@@ -25,7 +25,7 @@
         let name = document.getElementById("name").value;
         let type = document.getElementById("type").value;
 
-        fetch(`http://127.0.0.1:5000/chord?name=${name}&type=${type}`)
+        fetch(`http://127.0.0.1:5000/api/chord?name=${name}&type=${type}`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById("result").innerText =
