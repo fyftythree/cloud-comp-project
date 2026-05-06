@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta charset="UTF-8">
     <title>Chordloid</title>
 </head>
 <body>
 
-<h1>Chordloid</h1>
+<div class="container">
 
-<label>Chord Name:</label>
-<input id="name" type="text" placeholder="C">
+    <div style="display:flex; justify-content:space-between;">
+        <h1>Chordloid</h1>
 
-<label>Chord Type:</label>
-<input id="type" type="text" placeholder="major">
+        <form action="/logout" method="get">
+            <button>Logout</button>
+        </form>
+    </div>
 
-<button onclick="getChord()">Get Notes</button>
 
-<h2 id="result"></h2>
+    <label>Chord Name:</label>
+    <input id="name" type="text" placeholder="C">
 
+    <label>Chord Type:</label>
+    <input id="type" type="text" placeholder="major">
+
+    <button onclick="getChord()">Get Notes</button>
+
+    <h2 id="result"></h2>
+
+</div>
 <script>
     function getChord(){
 

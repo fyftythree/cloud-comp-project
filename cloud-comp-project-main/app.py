@@ -8,9 +8,18 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = "dev-secret-key"
 
+@app.route("/")
+def home():
+    if "user_id" in session:
+        return redirect("/chord_page")
+    return redirect("/login")
+
+
 @app.route('/chord_page')
 def chord():
-    return render_template("index.html")
+    if "user_id" not in session:
+        return redirect("/login")
+    return render_template("index.html", username=session.get("username"))
 
 @app.route('/api/chord')
 def get_chord():
