@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+<body>
+<header>
+    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png"
+         alt="Chordloid Banner"
+         style="width: 100%; max-height: 200px; object-fit: cover;">
+</header>
+<h1>Welcome, {{ username }}!</h1>
+
+<h2>What would you like to do?</h2>
+
+<button onclick="goToChord()">Find Chord Notes</button> <button onclick="goToProgressions()">View Saved Progressions</button> <button onclick="logOut()">Logout</button>
+
+<script>
+    function goToChord() {
+        window.location.href = "/chord_page";
+    }
+
+    function goToProgressions() {
+        window.location.href = "/progressions";
+    }
+
+    function logOut() {
+        window.location.href = "/login";
+    }
+</script>
+
+</body>
+</html>

@@ -4,32 +4,92 @@
     <meta charset="UTF-8">
     <title>Chordloid</title>
 </head>
+
+<header>
+    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png"
+         alt="Chordloid Banner"
+         style="width: 100%; max-height: 200px; object-fit: cover;">
+</header>
+
 <body>
 
 <h1>Chordloid</h1>
 
 <label>Chord Name:</label>
-<input id="name" type="text" placeholder="C">
+<input id="name" type="text" placeholder="C,D,E,etc.">
 
 <label>Chord Type:</label>
-<input id="type" type="text" placeholder="major">
+<input id="type" type="text" placeholder="maj,7,dim,etc.">
 
-<button onclick="getChord()">Get Notes</button>
+<select id="prog">
+    {% for p in progressions %}
+        <option value="{{ p[0] }}">{{ p[1] }}</option>
+    {% endfor %}
+</select>
+
+<button onclick="getChord()">Get Notes</button> <button onclick="addToProg()">Add To Progression</button> <button onclick="goDashboard()">Back To Dashboard</button>
 
 <h2 id="result"></h2>
 
-<script>
-    function getChord(){
+{% include "piano_roll.html" %}
 
-        console.log("Button clicked");
+<script>
+
+    function addToProg() {
+        let progressionId = document.getElementById("prog").value;
         let name = document.getElementById("name").value;
         let type = document.getElementById("type").value;
 
-        fetch(`http://127.0.0.1:5000/api/chord?name=${name}&type=${type}`)
-            .then(response => response.json())
+        fetch("http://127.0.0.1:5000/api/add_to_progression", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                progression_id: progressionId,
+                chord_name: name,
+                chord_type: type
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("result").innerText =
+                data.error ? data.error : "Added!";
+        });
+    }
+
+    function goDashboard() {
+        window.location.href = "/dashboard";
+    }
+
+    function displayChord(notes) {
+
+        document.querySelectorAll(".note").forEach(note => {
+            note.classList.remove("active");
+        });
+
+        notes.forEach(n => {
+            let element = document.querySelector(`[data-note="${n}"]`);
+
+            if (element) {
+                element.classList.add("active");
+            }
+        });
+    }
+
+    function getChord() {
+
+        let name = document.getElementById("name").value;
+        let type = document.getElementById("type").value;
+
+        fetch(`/api/chord?name=${encodeURIComponent(name)}&type=${encodeURIComponent(type)}`)
+            .then(res => res.json())
             .then(data => {
+
                 document.getElementById("result").innerText =
                     "Notes: " + data.notes.join(", ");
+
+                displayChord(data.notes);
             });
     }
 </script>

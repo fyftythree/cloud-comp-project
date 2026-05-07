@@ -4,12 +4,17 @@ import bcrypt
 import time
 
 notes = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
-types = ["major", "minor", "augmented", "diminished"]
+types = ["maj", "min", "aug", "dim", "maj7", "7", "min7", "9", "add9"]
 intervals = {
-    "major": [0, 4, 7],
-    "minor": [0, 3, 7],
-    "augmented": [0, 4, 8],
-    "diminished": [0, 3, 6]
+    "maj":   [0, 4, 7],
+    "min":   [0, 3, 7],
+    "aug":   [0, 4, 8],
+    "dim":   [0, 3, 6],
+    "maj7":  [0, 4, 7, 11],
+    "7":     [0, 4, 7, 10],
+    "min7":  [0, 3, 7, 10],
+    "9":     [0, 4, 7, 10, 14],
+    "add9":  [0, 4, 7, 14]
 }
 
 def insert_chord(name, chord_type):
@@ -20,7 +25,7 @@ def insert_chord(name, chord_type):
             VALUES (?, ?)
         """, (name, chord_type))
 
-def get_chord(name, chord_type):
+def get_user_chord(name, chord_type):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
@@ -89,3 +94,107 @@ def verify_user(username, password):
             return user_id
 
         return None
+
+def get_user_progressions(user_id): #for ALL progressions
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT id, name
+            FROM progressions
+            WHERE user_id = ?
+        """, (user_id,))
+
+        return cursor.fetchall()
+
+def get_progression(progression_id, user_id): #for one specific progression
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT id, name
+            FROM progressions
+            WHERE id = ? AND user_id = ?
+        """, (progression_id, user_id))
+
+        return cursor.fetchone()
+
+def get_progression_chords(progression_id): #get each chord from one progression using id
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT c.name, c.type, GROUP_CONCAT(n.note)
+            FROM progression_chords pc
+            JOIN chords c ON pc.chord_id = c.id
+            JOIN chord_notes n ON c.id = n.chord_id
+            WHERE pc.progression_id = ?
+            GROUP BY pc.id
+            ORDER BY pc.position
+        """, (progression_id,))
+
+        return cursor.fetchall()
+
+def get_progression_chord_notes(progression_id):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        SELECT
+                pc.position,
+                c.name,
+                c.type,
+                GROUP_CONCAT(n.note)
+            FROM progression_chords pc
+            JOIN chords c ON pc.chord_id = c.id
+            JOIN chord_notes n ON c.id = n.chord_id
+            WHERE pc.progression_id = ?
+            GROUP BY pc.id
+            ORDER BY pc.position
+        """, (progression_id,))
+
+        rows = cursor.fetchall()
+
+        chords = []
+
+        for row in rows:
+            position, name, chord_type, chord_notes = row
+            chords.append({
+                "position": position,
+                "name": name,
+                "type": chord_type,
+                "notes": chord_notes.split(",")
+            })
+
+        return chords
+        
+
+def create_progression_db(user_id, name):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            INSERT INTO progressions (user_id, name)
+            VALUES (?, ?)
+        """, (user_id, name))
+
+        conn.commit()
+
+def add_chord_to_progression(progression_id, chord_id):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM progression_chords
+            WHERE progression_id = ?
+        """, (progression_id,))
+
+        position = cursor.fetchone()[0] + 1
+
+        cursor.execute("""
+            INSERT INTO progression_chords (progression_id, chord_id, position)
+            VALUES (?, ?, ?)
+        """, (progression_id, chord_id, position))
+
+        conn.commit()

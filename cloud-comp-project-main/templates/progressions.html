@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Progressions</title>
+</head>
+<body>
+<header>
+    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png"
+         alt="Chordloid Banner"
+         style="width: 100%; max-height: 200px; object-fit: cover;">
+</header>
+<h1>{{ username }}'s Progressions</h1>
+
+<!-- Create progression -->
+<h3>Create New Progression</h3>
+
+<form method="POST" action="/create_progression">
+    <input type="text" name="name" placeholder="e.g. Jazz Loop" required>
+    <button type="submit">Create</button>
+</form>
+
+<hr>
+
+<!-- List existing progressions -->
+<h3>Your Progressions</h3>
+
+<ul>
+    {% for p in progressions %}
+        <li>
+            {{ p[1] }}
+            <button onclick="viewProgression({{ p[0] }})">
+                View
+            </button>
+        </li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<button onclick="goDashboard()">Back to Dashboard</button>
+
+<script>
+function goDashboard() {
+    window.location.href = "/dashboard";
+}
+
+function viewProgression(id) {
+    window.location.href = "/progression/" + id;
+}
+</script>
+
+</body>
+</html>
