@@ -1,47 +1,41 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 </head>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-    }
 
-    button {
-        margin: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-</style>
 <body>
 <header>
-    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png"
-         alt="Chordloid Banner"
-         style="width: 100%; max-height: 200px; object-fit: cover;">
+    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png" alt="Chordloid Banner">
 </header>
-<h1>Welcome, {{ username }}!</h1>
 
-<h2>What would you like to do?</h2>
+<div class="container">
+    <h1>Welcome, {{ username }}!</h1>
 
-<button onclick="goToChord()">Find Chord Notes</button> <button onclick="goToProgressions()">View Saved Progressions</button> <button onclick="logOut()">Logout</button>
+    <h2>What would you like to do?</h2>
+
+    <div class="button-row">
+        <button onclick="goToChord()">Find Chord Notes</button>
+        <button onclick="goToProgressions()">View Saved Progressions</button>
+        <button onclick="logOut()">Logout</button>
+    </div>
+</div>
 
 <script>
-    function goToChord() {
-        window.location.href = "/chord_page";
-    }
+function goToChord() {
+    window.location.href = "/chord_page";
+}
 
-    function goToProgressions() {
-        window.location.href = "/progressions";
-    }
+function goToProgressions() {
+    window.location.href = "/progressions";
+}
 
-    function logOut() {
-        window.location.href = "/login";
-    }
+function logOut() {
+    window.location.href = "/logout";
+}
 </script>
 
 </body>

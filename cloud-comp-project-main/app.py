@@ -8,7 +8,11 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = "dev-secret-key"
 
-
+@app.route("/")
+def home():
+    if "user_id" in session:
+        return redirect("/dashboard")
+    return redirect("/login")
 
 @app.route("/chord_page")
 def chord_page():
@@ -24,7 +28,7 @@ def chord_page():
 
 @app.route("/dashboard")
 def dashboard():
-    if "username" not in session:
+    if "user_id" not in session:
         return redirect("/login")
     return render_template("dashboard.html", username=session["username"])
 
@@ -160,5 +164,31 @@ def logout():
     session.clear()
     return redirect("/login")
 
+@app.route("/delete_progression/<int:id>", methods=["POST"])
+def delete_progression(id):
+
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    conn = sqlite3.connect("data/chords.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM progression_chords
+        WHERE progression_id = ?
+    """, (id,))
+
+    cursor.execute("""
+        DELETE FROM progressions
+        WHERE id = ?
+    """, (id,))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"success": True})
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
+
