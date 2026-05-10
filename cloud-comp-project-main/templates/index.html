@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta charset="UTF-8">
     <title>Chordloid</title>
 </head>
@@ -15,19 +20,34 @@
 
 <h1>Chordloid</h1>
 
-<label>Chord Name:</label>
-<input id="name" type="text" placeholder="C,D,E,etc.">
+<div class="top-row">
 
-<label>Chord Type:</label>
-<input id="type" type="text" placeholder="maj,7,dim,etc.">
+    <div class="input-group">
+        <label>Chord Name</label>
+        <input id="name" type="text" placeholder="C,D,E,etc.">
+    </div>
 
-<select id="prog">
-    {% for p in progressions %}
-        <option value="{{ p[0] }}">{{ p[1] }}</option>
-    {% endfor %}
-</select>
+    <div class="input-group">
+        <label>Chord Type</label>
+        <input id="type" type="text" placeholder="maj,7,dim,etc.">
+    </div>
 
-<button onclick="getChord()">Get Notes</button> <button onclick="addToProg()">Add To Progression</button> <button onclick="goDashboard()">Back To Dashboard</button>
+    <div class="input-group">
+        <label>Progression</label>
+        <select id="prog">
+            {% for p in progressions %}
+                <option value="{{ p[0] }}">{{ p[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+</div>
+
+<div class="button-row">
+    <button onclick="getChord()">Get Notes</button>
+    <button onclick="addToProg()">Add To Progression</button>
+    <button onclick="goDashboard()">Back To Dashboard</button>
+</div>
 
 <h2 id="result"></h2>
 
@@ -40,7 +60,7 @@
         let name = document.getElementById("name").value;
         let type = document.getElementById("type").value;
 
-        fetch("http://127.0.0.1:5000/api/add_to_progression", {
+        fetch("/api/add_to_progression", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

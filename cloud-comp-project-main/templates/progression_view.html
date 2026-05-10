@@ -1,51 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progression</title>
 </head>
 
-
-
 <body>
+<header>
+    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png" alt="Chordloid Banner">
+</header>
 
-<button onclick="goDashboard()">Back To Dashboard</button>
+<div class="container">
+    <button onclick="goDashboard()">Back To Dashboard</button>
 
-<h1>{{ progression[1] }}</h1>
+    <h1>{{ progression[1] }}</h1>
 
-<h3>Chords</h3>
+    <h3>Chords</h3>
 
-<ul>
-{% for chord in chords %}
-    <li>
+    <div class="button-row">
+        {% for chord in chords %}
         <button onclick='displayChord({{ chord["notes"]|tojson }})'>
             {{ chord["name"] }}{{ chord["type"] }}
         </button>
-    </li>
-{% endfor %}
-</ul>
+        {% endfor %}
+    </div>
 
-<!-- shared piano display -->
-{% include "piano_roll.html" %}
+    {% include "piano_roll.html" %}
+</div>
 
 <script>
-    function displayChord(notes) {
+function displayChord(notes) {
+    document.querySelectorAll(".note").forEach(note => {
+        note.classList.remove("active");
+    });
 
-        document.querySelectorAll(".note").forEach(note => {
-            note.classList.remove("active");
-        });
+    notes.forEach(n => {
+        let element = document.querySelector(`[data-note="${n}"]`);
 
-        notes.forEach(n => {
-            let element = document.querySelector(`[data-note="${n}"]`);
+        if (element) {
+            element.classList.add("active");
+        }
+    });
+}
 
-            if (element) {
-                element.classList.add("active");
-            }
-        });
-    }
-    function goDashboard() {
-        window.location.href = "/dashboard";
-    }
+function goDashboard() {
+    window.location.href = "/dashboard";
+}
 </script>
 
 </body>

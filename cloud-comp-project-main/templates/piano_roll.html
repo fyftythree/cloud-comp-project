@@ -1,41 +1,16 @@
-<div class="piano-roll">
-    <div class="note" data-note="C">C</div>
-    <div class="note" data-note="C#">C#</div>
-    <div class="note" data-note="D">D</div>
-    <div class="note" data-note="D#">D#</div>
-    <div class="note" data-note="E">E</div>
-    <div class="note" data-note="F">F</div>
-    <div class="note" data-note="F#">F#</div>
-    <div class="note" data-note="G">G</div>
-    <div class="note" data-note="G#">G#</div>
-    <div class="note" data-note="A">A</div>
-    <div class="note" data-note="A#">A#</div>
-    <div class="note" data-note="B">B</div>
+<div class="piano-wrapper">
+    <div class="piano-roll">
+        <div class="note" data-note="C">C</div>
+        <div class="note" data-note="C#">C#</div>
+        <div class="note" data-note="D">D</div>
+        <div class="note" data-note="D#">D#</div>
+        <div class="note" data-note="E">E</div>
+        <div class="note" data-note="F">F</div>
+        <div class="note" data-note="F#">F#</div>
+        <div class="note" data-note="G">G</div>
+        <div class="note" data-note="G#">G#</div>
+        <div class="note" data-note="A">A</div>
+        <div class="note" data-note="A#">A#</div>
+        <div class="note" data-note="B">B</div>
+    </div>
 </div>
-
-<style>
-.piano-roll {
-    display: flex;
-    gap: 6px;
-    margin-top: 20px;
-}
-
-.note {
-    width: 50px;
-    height: 120px;
-
-    border: 1px solid black;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: white;
-    transition: 0.2s;
-}
-
-.note.active {
-    background: #4caf50;
-    color: white;
-}
-</style>

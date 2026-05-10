@@ -1,44 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progressions</title>
 </head>
+
 <body>
 <header>
-    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png"
-         alt="Chordloid Banner"
-         style="width: 100%; max-height: 200px; object-fit: cover;">
+    <img src="https://chordloid-images-bucket-719674478248-us-west-1-an.s3.us-west-1.amazonaws.com/pianoroll.png" alt="Chordloid Banner">
 </header>
-<h1>{{ username }}'s Progressions</h1>
 
-<!-- Create progression -->
-<h3>Create New Progression</h3>
+<div class="container progression-container">
+    <h1>{{ username }}'s Progressions</h1>
+    <button onclick="goDashboard()">Back to Dashboard</button>
+    <h3>Create New Progression</h3>
 
-<form method="POST" action="/create_progression">
-    <input type="text" name="name" placeholder="e.g. Jazz Loop" required>
-    <button type="submit">Create</button>
-</form>
+    <form method="POST" action="/create_progression">
+        <input type="text" name="name" placeholder="e.g. Jazz Loop" required>
+        <button type="submit">Create</button>
+    </form>
 
-<hr>
+    <h3>Your Progressions</h3>
 
-<!-- List existing progressions -->
-<h3>Your Progressions</h3>
+    <div class="progression-list">
+        {% for p in progressions %}
+        <div class="progression-card">
 
-<ul>
-    {% for p in progressions %}
-        <li>
-            {{ p[1] }}
-            <button onclick="viewProgression({{ p[0] }})">
-                View
-            </button>
-        </li>
-    {% endfor %}
-</ul>
+    <span>{{ p[1] }}</span>
 
-<hr>
+    <div class="button-row">
+        <button onclick="viewProgression({{ p[0] }})">
+            View
+        </button>
 
-<button onclick="goDashboard()">Back to Dashboard</button>
+        <button class="delete-btn"
+                onclick="deleteProgression({{ p[0] }})">
+            Delete
+        </button>
+    </div>
+
+</div>
+        {% endfor %}
+    </div>
+
+    <div class="button-row">
+    </div>
+</div>
 
 <script>
 function goDashboard() {
@@ -47,6 +56,16 @@ function goDashboard() {
 
 function viewProgression(id) {
     window.location.href = "/progression/" + id;
+}
+
+function deleteProgression(id) {
+
+    fetch("/delete_progression/" + id, {
+        method: "POST"
+    })
+    .then(() => {
+        location.reload();
+    });
 }
 </script>
 
