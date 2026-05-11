@@ -61,7 +61,7 @@ def get_chord_note(name, chord_type):
 
 def create_user(username, password):
     password_bytes = password.encode("utf-8")
-    hashed = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    hashed = bcrypt.hashpw(password_bytes, bcrypt.gensalt()).decode("utf-8")
 
     with get_connection() as conn:
         cursor = conn.cursor()
@@ -98,7 +98,7 @@ def verify_user(username, password):
 
         user_id, stored_hash = user
 
-        if bcrypt.checkpw(password_bytes, stored_hash):
+        if bcrypt.checkpw(password_bytes, stored_hash.encode("utf-8")):
             return user_id
 
         return None
