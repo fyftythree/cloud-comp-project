@@ -34,7 +34,7 @@ jobs:
         run: |
           IMAGE_TAG=${{ github.sha }}
 
-          docker build -t $ECR_REPO:$IMAGE_TAG .
+          docker build -t $ECR_REPO:$IMAGE_TAG cloud-comp-project-main
 
           docker tag $ECR_REPO:$IMAGE_TAG \
           ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$ECR_REPO:$IMAGE_TAG
