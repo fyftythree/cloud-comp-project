@@ -63,18 +63,21 @@ cd <repo-name>
 python -m venv venv
 
 Activate it:
-macOS/Linux
+macOS/Linux:
+
 source venv/bin/activate
 
-Windows
+Windows:
+
 venv\Scripts\activate
 
 
 3. Install dependencies
+   
 pip install -r requirements.txt
 
 
-4. Configure environment variables
+5. Configure environment variables
 Create a .env file:
 DB_HOST=your-host
 DB_NAME=your-db-name
@@ -83,11 +86,11 @@ DB_PASSWORD=your-password
 DB_PORT=5432
 
 
-5. Initialize the database
+6. Initialize the database
 python db_init.py
 
 
-6. Run the application
+7. Run the application
 python app.py
 
 The app should now be running at:
