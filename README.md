@@ -1,4 +1,3 @@
-**Chordloid**
 Chordloid is a cloud-based chord finder web application built using Flask, PostgreSQL, Docker, and AWS services.
 
 Users can search for musical chords, view the notes that make up each chord, and save custom chord progressions using user accounts.
