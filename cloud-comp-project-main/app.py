@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect
 from flask_cors import CORS
 from models import *
+import psycopg2
 import bcrypt
 import time
 
@@ -56,8 +57,8 @@ def validate_progression():
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT id FROM progressions,
-            WHERE user_id=? AND name=?
+            SELECT id FROM progressions
+            WHERE user_id = %s AND name = %s
         """, (session["user_id"], name))
 
         result = cursor.fetchone()
@@ -132,7 +133,6 @@ def create_account():
     register_success = create_user(username, password)
 
     if register_success:
-        create_user(username, password)
         return redirect("/login")
     else:
         return render_template("login.html", error="User already exists")
@@ -170,21 +170,20 @@ def delete_progression(id):
     if "user_id" not in session:
         return jsonify({"error": "Not logged in"}), 401
 
-    conn = sqlite3.connect("data/chords.db")
-    cursor = conn.cursor()
+    with get_connection() as conn:
+        cursor = conn.cursor()
 
-    cursor.execute("""
-        DELETE FROM progression_chords
-        WHERE progression_id = ?
-    """, (id,))
+        cursor.execute("""
+            DELETE FROM progression_chords
+            WHERE progression_id = %s
+        """, (id,))
 
-    cursor.execute("""
-        DELETE FROM progressions
-        WHERE id = ?
-    """, (id,))
+        cursor.execute("""
+            DELETE FROM progressions
+            WHERE id = %s
+        """, (id,))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
 
     return jsonify({"success": True})
 

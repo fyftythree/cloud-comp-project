@@ -22,27 +22,32 @@ def build_chord(root, chord_type): #helper for init_chord_notes
     return chord_notes
 
 def init_chord_notes():
-    with get_connection() as conn:
-        cursor = conn.cursor()
+    conn = get_connection()
+    cursor = conn.cursor()
 
-        for n in notes:
-            for t in types:
-                #get the chord id
-                cursor.execute("""
-                    SELECT id
-                    FROM chords 
-                    WHERE name = ? AND type = ?
-                """,(n,t))
+    for n in notes:
+        for t in types:
 
-                result = cursor.fetchone()
-                if result is None:
-                    continue
+            cursor.execute("""
+                SELECT id
+                FROM chords
+                WHERE name = %s AND type = %s
+            """, (n, t))
 
-                chord_id = result[0]
-                chord_notes = build_chord(n,t)
+            result = cursor.fetchone()
+            if result is None:
+                continue
 
-                for note in chord_notes:
-                    insert_chord_note(cursor, chord_id, note)
+            chord_id = result[0]
+            chord_notes = build_chord(n, t)
+
+            for note in chord_notes:
+                insert_chord_note(cursor, chord_id, note)
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 
 
 

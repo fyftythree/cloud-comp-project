@@ -2,4 +2,5 @@ Flask
 boto3
 flask-cors
 bcrypt
-
+psycopg2-binary
+python-dotenv

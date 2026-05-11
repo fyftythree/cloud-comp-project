@@ -1,7 +1,17 @@
 from models import *
+from db import *
+from dotenv import load_dotenv
+import os
 
-def main():
-    while True:
-        chord = get_chord_note(input("Enter chord name: "),input("Enter chord type: "))
-        print(chord)
-main()
+load_dotenv()
+
+conn = psycopg2.connect(
+    host=os.getenv("DB_HOST"),
+    database=os.getenv("DB_NAME"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    port=5432
+)
+print(os.getenv("DB_HOST"))
+print("Connected!")
+
