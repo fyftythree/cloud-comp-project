@@ -55,14 +55,18 @@ The application uses several PostgreSQL tables:
 These tables store user accounts, chord data, and saved progressions.
 
 **Running Locally**
+
 1. Clone the repository
+
 git clone <repo-url>
 cd <repo-name>
 
-2. Create a virtual environment
+3. Create a virtual environment
+
 python -m venv venv
 
 Activate it:
+
 macOS/Linux:
 
 source venv/bin/activate
@@ -78,7 +82,9 @@ pip install -r requirements.txt
 
 
 5. Configure environment variables
+   
 Create a .env file:
+
 DB_HOST=your-host
 DB_NAME=your-db-name
 DB_USER=your-user
@@ -86,21 +92,26 @@ DB_PASSWORD=your-password
 DB_PORT=5432
 
 
-6. Initialize the database
+7. Initialize the database
+   
 python db_init.py
 
 
-7. Run the application
+9. Run the application
+    
 python app.py
 
 The app should now be running at:
+
 http://127.0.0.1:5000
 
 **Docker**
 To build the Docker container:
+
 docker build -t chordloid .
 
 To run the container:
+
 docker run -p 5000:5000 chordloid
 
 **Future Improvements**
