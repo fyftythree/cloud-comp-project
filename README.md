@@ -103,7 +103,7 @@ python app.py
 
 The app should now be running at:
 
-http://127.0.0.1:5000
+http://13.52.100.76/
 
 **Docker**
 To build the Docker container:
